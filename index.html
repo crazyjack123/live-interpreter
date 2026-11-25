@@ -1,36 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
-
-<meta name="viewport"
-      content="width=device-width, initial-scale=1">
-
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="referrer" content="no-referrer">
-
-<meta name="apple-mobile-web-app-capable"
-      content="yes">
-
-<meta name="theme-color" content="#f1f5f9">
-
-<title>Personal Interpreter</title>
+<meta name="theme-color" content="#0f172a">
+<title>Personal Interpreter V3</title>
 
 <style>
-
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont,
-               Arial, sans-serif;
-  background: #f1f5f9;
-  color: #1e293b;
+  font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+  background: #0f172a;
+  color: #f1f5f9;
   margin: 0;
   padding: 16px;
-  text-align: center;
 }
 
 .container {
@@ -39,41 +24,43 @@ body {
 }
 
 .card {
-  background: white;
-  border-radius: 24px;
-  padding: 24px;
-  margin: 14px auto;
-  box-shadow: 0 5px 24px rgba(0,0,0,0.05);
+  background: #1e293b;
+  border: 1px solid #334155;
+  padding: 22px;
+  border-radius: 22px;
+  margin: 14px 0;
 }
 
-h1 {
-  font-size: 27px;
-  margin: 8px 0;
-}
+.center { text-align: center; }
+
+h1 { font-size: 25px; }
+h2 { font-size: 20px; }
+h3 { font-size: 17px; }
 
 .flags {
   font-size: 38px;
-  margin: 18px 0;
+  margin: 16px 0;
 }
 
-.subtitle {
-  color: #64748b;
-  font-size: 14px;
+small, .muted {
+  color: #94a3b8;
+  font-size: 13px;
   line-height: 1.6;
 }
 
 .version {
   font-size: 11px;
+  letter-spacing: 2px;
   color: #94a3b8;
 }
 
-button, a.button, select {
+button, select, a.button {
   display: block;
   width: 100%;
-  padding: 17px;
-  margin: 12px 0;
+  padding: 16px;
+  border-radius: 12px;
   font-size: 16px;
-  border-radius: 13px;
+  margin: 10px 0;
 }
 
 button, a.button {
@@ -82,262 +69,353 @@ button, a.button {
   font-weight: 600;
   cursor: pointer;
   text-decoration: none;
+  text-align: center;
 }
 
 button:disabled {
-  opacity: 0.4;
+  opacity: .4;
   cursor: default;
 }
 
-.start {
-  background: #15803d;
-}
-
-.stop {
-  background: #dc2626;
-}
-
-.play {
-  background: #2563eb;
-}
-
-.refresh {
-  background: #475569;
-}
-
 select {
-  background: #ffffff;
-  border: 1px solid #cbd5e1;
-  color: #334155;
+  background: #0f172a;
+  color: #f1f5f9;
+  border: 1px solid #475569;
 }
+
+.start { background: #15803d; }
+.stop { background: #b91c1c; }
+.secondary { background: #475569; }
+.play { background: #2563eb; }
 
 #status {
-  background: #f1f5f9;
+  background: #0f172a;
   padding: 16px;
-  border-radius: 12px;
   margin: 20px 0;
-  font-size: 14px;
+  border-radius: 12px;
   overflow-wrap: anywhere;
-}
-
-#micName {
-  font-size: 13px;
-  color: #64748b;
-  overflow-wrap: anywhere;
-}
-
-#meter {
-  background: #e2e8f0;
-  height: 15px;
-  border-radius: 20px;
-  overflow: hidden;
-}
-
-#level {
-  background: #22c55e;
-  height: 100%;
-  width: 0%;
-  transition: width 0.1s;
-}
-
-.stats {
-  display: flex;
-  justify-content: space-around;
-  gap: 12px;
-  margin: 25px 0;
-}
-
-.stats div {
-  flex: 1;
-  background: #f8fafc;
-  border-radius: 15px;
-  padding: 16px 8px;
-}
-
-.stats strong {
-  display: block;
-  font-size: 28px;
-  margin-top: 8px;
-  font-variant-numeric: tabular-nums;
-}
-
-small {
-  color: #64748b;
-}
-
-#transcript {
-  text-align: left;
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
-  max-height: 250px;
-  overflow-y: auto;
-  line-height: 1.65;
-  font-size: 15px;
-}
-
-#authInfo {
-  font-size: 12px;
-  color: #64748b;
+  line-height: 1.5;
 }
 
 .indicator {
-  height: 85px;
-  width: 85px;
+  width: 100px;
+  height: 100px;
   margin: 20px auto;
+  display: grid;
+  place-items: center;
+  background: #334155;
   border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 38px;
-  background: #f1f5f9;
+  font-size: 44px;
 }
 
 .indicator.active {
-  background: #dcfce7;
+  background: #14532d;
   animation: pulse 2s infinite;
 }
 
 @keyframes pulse {
-  0%, 100% {
-    box-shadow: 0 0 0 0 rgba(34,197,94,0.2);
-  }
   50% {
-    box-shadow: 0 0 0 12px rgba(34,197,94,0.05);
+    box-shadow: 0 0 0 12px #22c55e15;
   }
+}
+
+.meter {
+  background: #334155;
+  height: 12px;
+  overflow: hidden;
+  border-radius: 10px;
+  margin: 8px 0 18px;
+}
+
+.bar {
+  width: 0%;
+  height: 100%;
+  background: #22c55e;
+  transition: width .2s;
+}
+
+#outputLevel { background: #60a5fa; }
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.stats {
+  display: flex;
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.stats div {
+  flex: 1;
+  background: #0f172a;
+  padding: 15px 6px;
+  border-radius: 14px;
+  text-align: center;
+}
+
+.stats strong {
+  display: block;
+  font-size: 26px;
+  margin-top: 6px;
+  font-variant-numeric: tabular-nums;
+}
+
+label {
+  display: block;
+  margin-top: 15px;
+  color: #cbd5e1;
+}
+
+.check {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+}
+
+input[type=checkbox] {
+  width: 20px;
+  height: 20px;
+  accent-color: #22c55e;
+}
+
+.transcript {
+  background: #0f172a;
+  padding: 15px;
+  border-radius: 12px;
+  min-height: 80px;
+  max-height: 230px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  line-height: 1.6;
+}
+
+summary {
+  cursor: pointer;
+  font-weight: 600;
 }
 
 [hidden] {
   display: none !important;
 }
-
 </style>
-
 </head>
 
 <body>
-
 <div class="container">
 
-  <div class="card">
+<div class="card center">
 
-    <span class="version">
-      PERSONAL INTERPRETER V2.0
-    </span>
+  <div class="version">PERSONAL INTERPRETER V3.0</div>
 
-    <h1>Personal Interpreter</h1>
+  <h1>Personal Interpreter</h1>
 
-    <div class="flags">🇵🇱 → 🇬🇧</div>
+  <div class="flags">🇵🇱 → 🇬🇧</div>
 
-    <p class="subtitle">
-      Continuous Polish-to-English translation
-    </p>
-
-    <div id="indicator" class="indicator">
-      🎧
-    </div>
-
-    <p class="subtitle">
-      Connect your Shokz OpenRun headphones
-    </p>
-
-    <div id="status">
-      Checking authentication...
-    </div>
-
-    <p id="authInfo"></p>
-
-    <select id="microphone">
-      <option value="">
-        System default microphone
-      </option>
-    </select>
-
-    <button id="start"
-            class="start"
-            onclick="startTranslation()"
-            disabled>
-      Start live translation
-    </button>
-
-    <button id="stop"
-            class="stop"
-            onclick="stopTranslation()"
-            disabled>
-      Stop translation
-    </button>
-
-    <a id="refresh"
-       class="button refresh"
-       hidden>
-       Get secure connection
-    </a>
-
-    <audio id="audio"
-           autoplay
-           playsinline>
-    </audio>
-
-    <button id="play"
-            class="play"
-            onclick="enableAudio()"
-            hidden>
-      Enable headphone audio
-    </button>
-
-    <p id="micName">
-      No microphone connected
-    </p>
-
-    <div id="meter">
-      <div id="level"></div>
-    </div>
-
-    <div class="stats">
-
-      <div>
-        <small>Session time</small>
-        <strong id="duration">00:00</strong>
-      </div>
-
-      <div>
-        <small>Estimated cost</small>
-        <strong id="cost">$0.00</strong>
-      </div>
-
-    </div>
-
-    <small>
-      Five-minute automatic test limit
-    </small>
-
-  </div>
-
-  <div class="card">
-
-    <h3>Live English translation</h3>
-
-    <div id="transcript">
-      Waiting for Polish speech...
-    </div>
-
-  </div>
-
-  <p class="subtitle">
-    Audio is streamed directly to OpenAI.
-    <br>
-    This application does not save recordings
-    or transcripts.
+  <p class="muted">
+    Continuous conversation interpretation
   </p>
+
+  <div id="indicator" class="indicator">🎧</div>
+
+  <div id="status">Checking authentication...</div>
+
+  <p id="authInfo" class="muted"></p>
+
+  <button id="start" class="start" disabled>
+    Start interpreting
+  </button>
+
+  <button id="stop" class="stop" disabled>
+    Stop interpreting
+  </button>
+
+  <a id="refresh" class="button secondary" hidden>
+    Get secure connection
+  </a>
+
+  <audio id="audio" autoplay playsinline></audio>
+
+  <button id="play" class="play" hidden>
+    Enable English audio
+  </button>
+
+  <p id="micName" class="muted">
+    Microphone disconnected
+  </p>
+
+  <div class="row">
+    <small>Microphone input</small>
+    <small id="inputReading">—</small>
+  </div>
+
+  <div class="meter">
+    <div id="inputLevel" class="bar"></div>
+  </div>
+
+  <div class="row">
+    <small>Translated audio</small>
+    <small id="outputReading">—</small>
+  </div>
+
+  <div class="meter">
+    <div id="outputLevel" class="bar"></div>
+  </div>
+
+  <div class="stats">
+    <div>
+      <small>Listening time</small>
+      <strong id="duration">00:00</strong>
+    </div>
+    <div>
+      <small>Estimated cost</small>
+      <strong id="cost">$0.00</strong>
+    </div>
+  </div>
+
+  <small id="wakeStatus">Screen wake lock inactive</small>
+
+</div>
+
+<div class="card">
+
+<details open>
+<summary>Audio and session settings</summary>
+
+<label for="microphone">Microphone</label>
+
+<select id="microphone">
+  <option value="">System default microphone</option>
+</select>
+
+<button id="detect" class="secondary">
+  Detect microphones
+</button>
+
+<label for="profile">Listening profile</label>
+
+<select id="profile">
+  <option value="ambient">
+    Ambient conversation
+  </option>
+  <option value="direct">
+    Direct conversation
+  </option>
+  <option value="noisy">
+    Noisy environment
+  </option>
+</select>
+
+<p id="profileInfo" class="muted">
+  Minimal browser audio processing.
+  Intended to capture surrounding voices.
+</p>
+
+<label for="filter">AI noise reduction</label>
+
+<select id="filter">
+  <option value="off">Off — capture more sound</option>
+  <option value="light">Light far-field filtering</option>
+  <option value="medium">Medium far-field filtering</option>
+</select>
+
+<p class="muted">
+  Start with noise reduction off.
+  Change it during a session to compare results.
+</p>
+
+<label for="limit">Maximum session duration</label>
+
+<select id="limit">
+  <option value="5">5 minutes</option>
+  <option value="15" selected>15 minutes</option>
+  <option value="30">30 minutes</option>
+  <option value="60">60 minutes</option>
+</select>
+
+<label class="check">
+  <input id="captions" type="checkbox">
+  Show English subtitles
+</label>
+
+<label class="check">
+  <input id="sourceCaptions" type="checkbox">
+  Enable source transcription diagnostics
+</label>
+
+<p class="muted">
+  Source transcription may incur additional API charges.
+</p>
+
+<label class="check">
+  <input id="awake" type="checkbox" checked>
+  Keep screen awake
+</label>
+
+<p id="maxCost" class="muted"></p>
+
+</details>
+
+</div>
+
+<div class="card">
+
+<details>
+<summary>Connection diagnostics</summary>
+
+<p>Connection: <span id="connection">Idle</span></p>
+<p>Round-trip time: <span id="latency">—</span></p>
+<p>Audio jitter: <span id="jitter">—</span></p>
+<p>Incoming packet loss: <span id="loss">—</span></p>
+<p>Playback: <span id="playback">Idle</span></p>
+<p>Microphone track: <span id="trackState">Idle</span></p>
+<p>AI settings: <span id="aiSettings">Not connected</span></p>
+
+<p class="muted">
+  These statistics describe network and media performance,
+  not the total translation delay.
+</p>
+
+<pre id="actualSettings" class="transcript">No active microphone.</pre>
+
+</details>
+
+</div>
+
+<div id="sourcePanel" class="card" hidden>
+  <h3>🇵🇱 Source speech</h3>
+  <div id="sourceText" class="transcript">
+    Waiting for speech...
+  </div>
+</div>
+
+<div id="englishPanel" class="card" hidden>
+  <h3>🇬🇧 English translation</h3>
+  <div id="englishText" class="transcript">
+    Waiting for translation...
+  </div>
+</div>
+
+<p class="muted center">
+  Audio streams directly to OpenAI.
+  This application does not save audio recordings
+  or transcripts to persistent storage.
+</p>
 
 </div>
 
 <script>
 
-// ======================================
+// =====================================
 // CONFIGURATION
-// ======================================
+// =====================================
 
-// REPLACE THIS WITH YOUR GOOGLE APPS SCRIPT URL
+// INSERT YOUR GOOGLE APPS SCRIPT URL HERE
 
 const AUTH_URL =
   "https://script.google.com/macros/s/AKfycbw0ixXvt6Yd0IQI8AYm_uR51Vko7xLRpI8uYn8eKD-AAsK2mTAkgQ8QD4gLv0ZXMpJR/exec";
@@ -345,59 +423,42 @@ const AUTH_URL =
 const OPENAI_URL =
   "https://api.openai.com/v1/realtime/translations/calls";
 
-const PRICE_PER_MINUTE = 0.034;
-
-const MAX_SECONDS = 300;
-
-// ======================================
-// APPLICATION STATE
-// ======================================
+const TRANSLATION_PRICE = 0.034;
+const TRANSCRIPTION_PRICE_ESTIMATE = 0.017;
 
 const $ = id => document.getElementById(id);
 
 let active = null;
-let accessToken = null;
-let tokenExpiry = null;
+let token = null;
+let expiry = 0;
 let authTimer = null;
+let cooldownUntil = 0;
+let lastStatus = "";
 
-// ======================================
-// STATUS DISPLAY
-// ======================================
+// =====================================
+// STATUS AND AUTHENTICATION
+// =====================================
 
-function setStatus(message, type = "normal") {
+function status(message, type = "normal") {
 
-  const element = $("status");
+  lastStatus = message;
 
-  element.textContent = message;
+  $("status").textContent = message;
 
-  if (type === "success") {
+  const colours = {
+    normal: ["#0f172a", "#e2e8f0"],
+    success: ["#14532d", "#dcfce7"],
+    warning: ["#78350f", "#fef3c7"],
+    error: ["#7f1d1d", "#fee2e2"]
+  };
 
-    element.style.background = "#dcfce7";
-    element.style.color = "#166534";
+  const pair = colours[type] || colours.normal;
 
-  } else if (type === "error") {
-
-    element.style.background = "#fee2e2";
-    element.style.color = "#991b1b";
-
-  } else if (type === "warning") {
-
-    element.style.background = "#fef3c7";
-    element.style.color = "#92400e";
-
-  } else {
-
-    element.style.background = "#f1f5f9";
-    element.style.color = "#334155";
-
-  }
+  $("status").style.background = pair[0];
+  $("status").style.color = pair[1];
 }
 
-// ======================================
-// AUTHENTICATION
-// ======================================
-
-function configureAuthLink() {
+function authLink() {
 
   try {
 
@@ -418,116 +479,186 @@ function configureAuthLink() {
   } catch {
 
     $("refresh").removeAttribute("href");
-    $("refresh").hidden = true;
 
     return false;
   }
 }
 
-function showAuthRequired(message) {
+function authRequired(message) {
 
-  clearInterval(authTimer);
-
-  accessToken = null;
-  tokenExpiry = null;
+  token = null;
+  expiry = 0;
 
   $("start").disabled = true;
-  $("authInfo").textContent = "";
 
-  const configured = configureAuthLink();
+  const configured = authLink();
 
   $("refresh").hidden = !configured;
+  $("refresh").textContent = "Get secure connection";
 
-  setStatus(
+  $("authInfo").textContent = "";
+
+  status(
     configured
       ? message
-      : message + " Configure AUTH_URL in GitHub.",
+      : message + " Configure AUTH_URL.",
     "warning"
   );
 }
 
-function initialiseAuthentication() {
+function checkAuthentication() {
 
-  configureAuthLink();
+  if (active) return;
 
-  const params = new URLSearchParams(
-    window.location.hash.substring(1)
+  const remainingCooldown = Math.ceil(
+    (cooldownUntil - Date.now()) / 1000
   );
 
-  const token = params.get("token");
-  const expiry = Number(params.get("expires"));
+  if (remainingCooldown > 0) {
 
-  // Remove credentials from the visible URL.
+    $("start").disabled = true;
+    $("refresh").hidden = true;
 
-  if (window.location.hash) {
+    $("authInfo").textContent =
+      "Retry available in " +
+      remainingCooldown + " seconds.";
 
-    history.replaceState(
-      null,
-      "",
-      window.location.pathname +
-      window.location.search
-    );
+    return;
   }
 
-  if (!token || !token.startsWith("ek_")) {
+  if (cooldownUntil) {
 
-    showAuthRequired(
-      "Secure authentication required."
+    cooldownUntil = 0;
+
+    try {
+      sessionStorage.removeItem("retryUntil");
+    } catch {}
+
+    authRequired("Ready to reconnect.");
+
+    return;
+  }
+
+  if (!token) return;
+
+  if (expiry && Date.now() / 1000 >= expiry) {
+
+    authRequired(
+      "Authentication expired. Get a fresh connection."
     );
 
     return;
   }
 
-  accessToken = token;
+  if (expiry) {
 
-  tokenExpiry =
-    Number.isFinite(expiry) && expiry > 0
-      ? expiry
-      : null;
+    const seconds = Math.max(
+      0,
+      Math.floor(expiry - Date.now() / 1000)
+    );
 
-  function checkExpiry() {
-
-    if (active || !accessToken) return;
-
-    if (tokenExpiry) {
-
-      const remaining = Math.floor(
-        tokenExpiry - Date.now() / 1000
-      );
-
-      if (remaining <= 0) {
-
-        showAuthRequired(
-          "Connection expired. Get a fresh connection."
-        );
-
-        return;
-      }
-
-      $("authInfo").textContent =
-        "Secure connection available for " +
-        remaining + " seconds.";
-    }
+    $("authInfo").textContent =
+      "Authentication valid for " + seconds + "s";
   }
-
-  checkExpiry();
-
-  if (!accessToken) return;
-
-  $("start").disabled = false;
-  $("refresh").hidden = true;
-
-  setStatus(
-    "Securely connected. Ready to interpret.",
-    "success"
-  );
-
-  authTimer = setInterval(checkExpiry, 1000);
 }
 
-// ======================================
-// MICROPHONE DETECTION
-// ======================================
+function initialiseAuthentication() {
+
+  try {
+
+    cooldownUntil = Number(
+      sessionStorage.getItem("retryUntil")
+    ) || 0;
+
+  } catch {}
+
+  const params = new URLSearchParams(
+    location.hash.substring(1)
+  );
+
+  const receivedToken = params.get("token");
+
+  expiry = Number(params.get("expires")) || 0;
+
+  if (location.hash) {
+
+    history.replaceState(
+      null,
+      "",
+      location.pathname + location.search
+    );
+  }
+
+  if (receivedToken &&
+      receivedToken.startsWith("ek_")) {
+
+    token = receivedToken;
+
+    $("refresh").hidden = true;
+    $("start").disabled = false;
+
+    status("Securely connected. Ready to listen.", "success");
+
+  } else {
+
+    authRequired("Secure authentication required.");
+  }
+
+  authTimer = setInterval(
+    checkAuthentication,
+    1000
+  );
+
+  checkAuthentication();
+}
+
+// =====================================
+// MICROPHONE PROFILES
+// =====================================
+
+const profiles = {
+
+  ambient: {
+    echoCancellation: false,
+    noiseSuppression: false,
+    autoGainControl: false
+  },
+
+  direct: {
+    echoCancellation: true,
+    noiseSuppression: false,
+    autoGainControl: true
+  },
+
+  noisy: {
+    echoCancellation: true,
+    noiseSuppression: true,
+    autoGainControl: true
+  }
+};
+
+const descriptions = {
+
+  ambient:
+    "Minimal browser processing to capture people around you.",
+
+  direct:
+    "Echo cancellation and automatic gain for closer speech.",
+
+  noisy:
+    "More aggressive processing. May remove quieter speakers."
+};
+
+function updateProfile() {
+
+  const profile = $("profile").value;
+
+  $("profileInfo").textContent =
+    descriptions[profile];
+
+  $("filter").value =
+    profile === "noisy" ? "light" : "off";
+}
 
 async function detectMicrophones() {
 
@@ -536,7 +667,7 @@ async function detectMicrophones() {
     const devices =
       await navigator.mediaDevices.enumerateDevices();
 
-    const microphones = devices.filter(
+    const inputs = devices.filter(
       device => device.kind === "audioinput"
     );
 
@@ -549,27 +680,23 @@ async function detectMicrophones() {
       document.createElement("option");
 
     defaultOption.value = "";
-
     defaultOption.textContent =
       "System default microphone";
 
     select.appendChild(defaultOption);
 
-    microphones.forEach((device, index) => {
+    inputs.forEach((device, index) => {
 
       if (!device.deviceId) return;
 
-      const option =
-        document.createElement("option");
+      const option = document.createElement("option");
 
       option.value = device.deviceId;
 
       option.textContent =
-        device.label ||
-        "Microphone " + (index + 1);
+        device.label || "Microphone " + (index + 1);
 
       select.appendChild(option);
-
     });
 
     if (
@@ -577,64 +704,325 @@ async function detectMicrophones() {
         option => option.value === previous
       )
     ) {
-
       select.value = previous;
     }
 
   } catch {
 
-    // The default system microphone remains available.
-
+    // System default input remains available.
   }
 }
 
-// ======================================
+// =====================================
+// LIVE AI NOISE REDUCTION
+// =====================================
+
+function noiseReduction() {
+
+  switch ($("filter").value) {
+
+    case "light":
+      return {
+        type: "far_field",
+        strength: 0.25
+      };
+
+    case "medium":
+      return {
+        type: "far_field",
+        strength: 0.5
+      };
+
+    default:
+      return null;
+  }
+}
+
+function applyAISettings(s) {
+
+  if (
+    active !== s ||
+    !s.events ||
+    s.events.readyState !== "open"
+  ) return;
+
+  const input = {
+    noise_reduction: noiseReduction()
+  };
+
+  if (s.sourceEnabled) {
+
+    input.transcription = {
+      model: "gpt-realtime-whisper"
+    };
+
+  } else {
+
+    input.transcription = null;
+  }
+
+  s.events.send(JSON.stringify({
+
+    type: "session.update",
+
+    session: {
+      audio: {
+        input: input,
+        output: {
+          language: "en"
+        }
+      }
+    }
+
+  }));
+
+  $("aiSettings").textContent =
+    "Settings sent; awaiting confirmation";
+}
+
+// =====================================
+// SCREEN WAKE LOCK
+// =====================================
+
+async function acquireWakeLock(s) {
+
+  if (
+    active !== s ||
+    !$("awake").checked
+  ) return;
+
+  if (!navigator.wakeLock) {
+
+    $("wakeStatus").textContent =
+      "Wake lock unavailable on this browser";
+
+    return;
+  }
+
+  try {
+
+    const lock =
+      await navigator.wakeLock.request("screen");
+
+    if (active !== s) {
+
+      await lock.release();
+      return;
+    }
+
+    s.wakeLock = lock;
+
+    $("wakeStatus").textContent =
+      "Screen wake lock active";
+
+    lock.addEventListener("release", () => {
+
+      if (active === s) {
+
+        $("wakeStatus").textContent =
+          "Screen wake lock released";
+      }
+    });
+
+  } catch {
+
+    $("wakeStatus").textContent =
+      "Unable to keep screen awake";
+  }
+}
+
+// =====================================
+// SESSION COST
+// =====================================
+
+function estimatedRate(sourceEnabled) {
+
+  return TRANSLATION_PRICE +
+    (sourceEnabled ? TRANSCRIPTION_PRICE_ESTIMATE : 0);
+}
+
+function updateMaxCost() {
+
+  const minutes = Number($("limit").value);
+
+  const estimate =
+    minutes * estimatedRate($("sourceCaptions").checked);
+
+  $("maxCost").textContent =
+    "Estimated session cost: $" +
+    estimate.toFixed(2) +
+    " for " + minutes + " minutes.";
+}
+
+function updateTimer(s) {
+
+  if (!s.started) return;
+
+  const seconds = Math.floor(
+    (Date.now() - s.started) / 1000
+  );
+
+  const minutes = Math.floor(seconds / 60);
+
+  $("duration").textContent =
+    String(minutes).padStart(2, "0") + ":" +
+    String(seconds % 60).padStart(2, "0");
+
+  $("cost").textContent =
+    "$" + (
+      seconds / 60 *
+      estimatedRate(s.sourceEnabled)
+    ).toFixed(2);
+
+  if (seconds >= s.maxSeconds) {
+
+    stopTranslation(
+      "Maximum session duration reached."
+    );
+  }
+}
+
+// =====================================
+// TRANSCRIPTS
+// =====================================
+
+function appendTranscript(id, delta) {
+
+  if (!delta) return;
+
+  const box = $(id);
+
+  box.textContent += delta;
+
+  if (box.textContent.length > 16000) {
+
+    box.textContent =
+      box.textContent.slice(-12000);
+  }
+
+  box.scrollTop = box.scrollHeight;
+}
+
+function updateCaptionVisibility() {
+
+  $("englishPanel").hidden =
+    !$("captions").checked;
+
+  $("sourcePanel").hidden =
+    !$("sourceCaptions").checked;
+}
+
+// =====================================
+// RATE LIMIT HANDLING
+// =====================================
+
+function setCooldown(seconds) {
+
+  cooldownUntil =
+    Date.now() + seconds * 1000;
+
+  try {
+
+    sessionStorage.setItem(
+      "retryUntil",
+      String(cooldownUntil)
+    );
+
+  } catch {}
+
+  stopTranslation(
+    "OpenAI rate limit reached. Wait before reconnecting.",
+    "warning"
+  );
+
+  checkAuthentication();
+}
+
+function retrySeconds(response, message) {
+
+  const header = response.headers.get("Retry-After");
+
+  if (header) {
+
+    const seconds = Number(header);
+
+    if (Number.isFinite(seconds)) {
+
+      return Math.max(1, Math.ceil(seconds)) + 2;
+    }
+
+    const date = Date.parse(header);
+
+    if (Number.isFinite(date)) {
+
+      return Math.max(
+        1,
+        Math.ceil((date - Date.now()) / 1000)
+      ) + 2;
+    }
+  }
+
+  const match = message.match(
+    /try again in\s*(?:(\d+)m)?\s*(?:(\d+(?:\.\d+)?)s)?/i
+  );
+
+  if (match && (match[1] || match[2])) {
+
+    return Math.max(
+      1,
+      Math.ceil(
+        Number(match[1] || 0) * 60 +
+        Number(match[2] || 0)
+      )
+    ) + 2;
+  }
+
+  return 62;
+}
+
+// =====================================
 // START TRANSLATION
-// ======================================
+// =====================================
 
 async function startTranslation() {
 
   if (active) return;
 
-  if (!accessToken) {
-
-    showAuthRequired(
-      "Please obtain a secure connection."
-    );
-
-    return;
-  }
+  if (Date.now() < cooldownUntil) return;
 
   if (
-    tokenExpiry &&
-    tokenExpiry <= Date.now() / 1000
+    !token ||
+    (expiry && Date.now() / 1000 >= expiry)
   ) {
 
-    showAuthRequired(
-      "Your connection has expired."
-    );
+    authRequired("Get a fresh secure connection.");
 
     return;
   }
 
-  const token = accessToken;
+  const sessionToken = token;
 
-  // Do not reuse this credential for future sessions.
+  // Do not retain credentials for reuse.
 
-  accessToken = null;
-
-  clearInterval(authTimer);
+  token = null;
+  expiry = 0;
 
   const s = {
 
     pc: null,
+    events: null,
     stream: null,
-    context: null,
+    track: null,
+    wakeLock: null,
     timer: null,
-    meter: null,
-    timeout: null,
+    statsTimer: null,
+    connectTimeout: null,
+    disconnectTimeout: null,
+    abort: new AbortController(),
     started: null,
-    abort: new AbortController()
+    statsBusy: false,
+    sourceEnabled: $("sourceCaptions").checked,
+    maxSeconds: Number($("limit").value) * 60
 
   };
 
@@ -642,50 +1030,49 @@ async function startTranslation() {
 
   $("start").disabled = true;
   $("stop").disabled = false;
-  $("microphone").disabled = true;
-
   $("refresh").hidden = true;
-  $("authInfo").textContent = "";
+  $("profile").disabled = true;
+  $("microphone").disabled = true;
+  $("detect").disabled = true;
+  $("limit").disabled = true;
+  $("sourceCaptions").disabled = true;
+  $("awake").disabled = true;
 
-  $("transcript").textContent = "";
+  $("authInfo").textContent = "";
   $("duration").textContent = "00:00";
   $("cost").textContent = "$0.00";
+  $("sourceText").textContent = "";
+  $("englishText").textContent = "";
+
+  acquireWakeLock(s);
 
   try {
 
-    setStatus("Connecting microphone...");
+    status("Connecting microphone...");
 
-    const audioSettings = {
-
-      echoCancellation: true,
-      noiseSuppression: false,
-      autoGainControl: true
-
+    const settings = {
+      ...profiles[$("profile").value],
+      channelCount: 1
     };
 
-    const selectedMicrophone =
-      $("microphone").value;
+    if ($("microphone").value) {
 
-    if (selectedMicrophone) {
-
-      audioSettings.deviceId = {
-        exact: selectedMicrophone
+      settings.deviceId = {
+        exact: $("microphone").value
       };
     }
 
     const stream =
       await navigator.mediaDevices.getUserMedia({
 
-        audio: audioSettings,
+        audio: settings,
         video: false
 
       });
 
     if (active !== s) {
 
-      stream.getTracks().forEach(
-        track => track.stop()
-      );
+      stream.getTracks().forEach(t => t.stop());
 
       return;
     }
@@ -694,9 +1081,33 @@ async function startTranslation() {
 
     const track = stream.getAudioTracks()[0];
 
+    s.track = track;
+
     $("micName").textContent =
-      "Microphone: " +
-      (track.label || "System default");
+      "Input: " + (track.label || "System default");
+
+    $("actualSettings").textContent =
+      JSON.stringify(track.getSettings(), null, 2);
+
+    $("trackState").textContent =
+      track.muted ? "Muted" : "Active";
+
+    track.onmute = () => {
+
+      if (active === s) {
+
+        $("trackState").textContent =
+          "Microphone temporarily muted";
+      }
+    };
+
+    track.onunmute = () => {
+
+      if (active === s) {
+
+        $("trackState").textContent = "Active";
+      }
+    };
 
     track.onended = () => {
 
@@ -709,17 +1120,14 @@ async function startTranslation() {
       }
     };
 
-    detectMicrophones();
-
-    // Create the realtime audio connection.
-
     s.pc = new RTCPeerConnection();
 
     const pc = s.pc;
 
-    pc.addTrack(track, stream);
+    // Keep streaming audio continuously.
+    // No manual sentence detection or silence gating.
 
-    // Receive translated English audio.
+    pc.addTrack(track, stream);
 
     pc.ontrack = async event => {
 
@@ -728,6 +1136,9 @@ async function startTranslation() {
       $("audio").srcObject =
         event.streams[0] ||
         new MediaStream([event.track]);
+
+      $("playback").textContent =
+        "Remote audio track received";
 
       try {
 
@@ -738,16 +1149,24 @@ async function startTranslation() {
         if (active === s) {
 
           $("play").hidden = false;
+
+          $("playback").textContent =
+            "Tap Enable English audio";
         }
       }
     };
 
-    // Receive translated English subtitles.
+    s.events = pc.createDataChannel("oai-events");
 
-    const events =
-      pc.createDataChannel("oai-events");
+    s.events.onopen = () => {
 
-    events.onmessage = event => {
+      if (active === s) {
+
+        applyAISettings(s);
+      }
+    };
+
+    s.events.onmessage = event => {
 
       if (active !== s) return;
 
@@ -762,46 +1181,60 @@ async function startTranslation() {
         return;
       }
 
-      if (
-        data.type ===
-        "session.output_transcript.delta"
-      ) {
+      switch (data.type) {
 
-        $("transcript").textContent +=
-          data.delta || "";
+        case "session.output_transcript.delta":
 
-        // Avoid keeping an unlimited transcript.
+          appendTranscript(
+            "englishText",
+            data.delta
+          );
 
-        if (
-          $("transcript").textContent.length > 20000
-        ) {
+          break;
 
-          $("transcript").textContent =
-            $("transcript").textContent.slice(-15000);
-        }
+        case "session.input_transcript.delta":
 
-        $("transcript").scrollTop =
-          $("transcript").scrollHeight;
-      }
+          appendTranscript(
+            "sourceText",
+            data.delta
+          );
 
-      if (data.type === "error") {
+          break;
 
-        stopTranslation(
-          data.error?.message ||
-          "OpenAI translation error.",
-          "error"
-        );
-      }
+        case "session.updated":
 
-      if (data.type === "session.closed") {
+          $("aiSettings").textContent =
+            "Settings confirmed";
 
-        stopTranslation(
-          "Translation session completed."
-        );
+          break;
+
+        case "session.closed":
+
+          stopTranslation("Translation session ended.");
+
+          break;
+
+        case "error":
+
+          if (
+            data.error?.code ===
+            "rate_limit_exceeded"
+          ) {
+
+            setCooldown(62);
+
+          } else {
+
+            stopTranslation(
+              data.error?.message ||
+              "Translation service error.",
+              "error"
+            );
+          }
+
+          break;
       }
     };
-
-    // Monitor connection health.
 
     pc.onconnectionstatechange = () => {
 
@@ -809,24 +1242,49 @@ async function startTranslation() {
 
       const state = pc.connectionState;
 
+      $("connection").textContent = state;
+
       if (state === "connected") {
 
-        clearTimeout(s.timeout);
+        clearTimeout(s.connectTimeout);
+
+        clearTimeout(s.disconnectTimeout);
 
         $("indicator").classList.add("active");
 
-        setStatus(
-          "Listening and translating live...",
+        status(
+          "Listening and interpreting live...",
           "success"
         );
       }
 
       if (state === "disconnected") {
 
-        setStatus(
-          "Connection interrupted...",
+        status(
+          "Connection interrupted. Attempting recovery...",
           "warning"
         );
+
+        clearTimeout(s.disconnectTimeout);
+
+        // Allow the existing WebRTC session
+        // time to recover without creating a
+        // second paid translation session.
+
+        s.disconnectTimeout = setTimeout(() => {
+
+          if (
+            active === s &&
+            pc.connectionState === "disconnected"
+          ) {
+
+            stopTranslation(
+              "Connection lost. Start a fresh session.",
+              "error"
+            );
+          }
+
+        }, 12000);
       }
 
       if (
@@ -835,15 +1293,13 @@ async function startTranslation() {
       ) {
 
         stopTranslation(
-          "Connection ended.",
+          "Translation connection ended.",
           "error"
         );
       }
     };
 
-    // Establish the WebRTC session.
-
-    setStatus("Connecting to OpenAI...");
+    status("Connecting to OpenAI...");
 
     const offer = await pc.createOffer();
 
@@ -853,7 +1309,7 @@ async function startTranslation() {
 
     if (active !== s) return;
 
-    s.timeout = setTimeout(() => {
+    s.connectTimeout = setTimeout(() => {
 
       if (
         active === s &&
@@ -861,67 +1317,62 @@ async function startTranslation() {
       ) {
 
         stopTranslation(
-          "Connection timed out. Please try again.",
+          "Connection timed out.",
           "error"
         );
       }
 
     }, 30000);
 
-    // Start estimated billing timer.
-
     s.started = Date.now();
 
-    s.timer = setInterval(() => {
-
-      if (active !== s) return;
-
-      const seconds = Math.floor(
-        (Date.now() - s.started) / 1000
-      );
-
-      updateSessionTime(seconds);
-
-      if (seconds >= MAX_SECONDS) {
-
-        stopTranslation(
-          "Five-minute test completed."
-        );
-      }
-
-    }, 500);
+    s.timer = setInterval(
+      () => updateTimer(s),
+      500
+    );
 
     const response = await fetch(
-
       OPENAI_URL,
-
       {
-
         method: "POST",
-
         headers: {
-
-          Authorization: "Bearer " + token,
-
+          Authorization: "Bearer " + sessionToken,
           "Content-Type": "application/sdp"
-
         },
-
         body: offer.sdp,
-
         signal: s.abort.signal
-
       }
-
     );
+
+    if (active !== s) return;
 
     if (!response.ok) {
 
-      const message = await response.text();
+      const raw = await response.text();
+
+      let error = {};
+
+      try {
+        error = JSON.parse(raw).error || {};
+      } catch {}
+
+      const message =
+        error.message || "Request failed.";
+
+      if (
+        response.status === 429 &&
+        error.code === "rate_limit_exceeded"
+      ) {
+
+        setCooldown(
+          retrySeconds(response, message)
+        );
+
+        return;
+      }
 
       throw new Error(
-        "OpenAI error " +
-        response.status + ": " + message
+        "OpenAI " + response.status + ": " + message
       );
     }
 
@@ -930,15 +1381,16 @@ async function startTranslation() {
     if (active !== s) return;
 
     await pc.setRemoteDescription({
-
       type: "answer",
       sdp: answer
-
     });
 
     if (active !== s) return;
 
-    startAudioMeter(s);
+    s.statsTimer = setInterval(
+      () => readStats(s),
+      1000
+    );
 
   } catch (error) {
 
@@ -952,96 +1404,158 @@ async function startTranslation() {
   }
 }
 
-// ======================================
-// SESSION TIMER AND COST
-// ======================================
+// =====================================
+// WEBRTC MEDIA AND NETWORK DIAGNOSTICS
+// =====================================
 
-function updateSessionTime(seconds) {
+function displayLevel(barId, textId, level) {
 
-  const minutes = Math.floor(seconds / 60);
+  if (
+    typeof level !== "number" ||
+    !Number.isFinite(level)
+  ) {
 
-  const remaining = seconds % 60;
+    $(barId).style.width = "0%";
 
-  $("duration").textContent =
+    $(textId).textContent = "Unavailable";
 
-    String(minutes).padStart(2, "0") +
+    return;
+  }
 
-    ":" +
+  const percent = Math.min(
+    100,
+    Math.max(0, level * 400)
+  );
 
-    String(remaining).padStart(2, "0");
+  $(barId).style.width =
+    percent + "%";
 
-  $("cost").textContent =
-
-    "$" +
-
-    (
-      seconds / 60 * PRICE_PER_MINUTE
-    ).toFixed(2);
+  $(textId).textContent =
+    Math.round(percent) + "%";
 }
 
-// ======================================
-// MICROPHONE AUDIO LEVEL
-// ======================================
+async function readStats(s) {
 
-async function startAudioMeter(s) {
+  if (
+    active !== s ||
+    !s.pc ||
+    s.statsBusy
+  ) return;
+
+  s.statsBusy = true;
 
   try {
 
-    const AudioContextClass =
-
-      window.AudioContext ||
-      window.webkitAudioContext;
-
-    s.context = new AudioContextClass();
-
-    await s.context.resume();
+    const stats = await s.pc.getStats();
 
     if (active !== s) return;
 
-    const source =
-      s.context.createMediaStreamSource(s.stream);
+    let input = null;
+    let output = null;
+    let inbound = null;
+    let pair = null;
+    let transport = null;
 
-    const analyser =
-      s.context.createAnalyser();
+    stats.forEach(report => {
 
-    analyser.fftSize = 1024;
+      if (
+        report.type === "media-source" &&
+        report.kind === "audio"
+      ) {
 
-    source.connect(analyser);
-
-    const samples =
-      new Uint8Array(analyser.fftSize);
-
-    s.meter = setInterval(() => {
-
-      if (active !== s) return;
-
-      analyser.getByteTimeDomainData(samples);
-
-      let sum = 0;
-
-      for (const sample of samples) {
-
-        sum += ((sample - 128) / 128) ** 2;
+        input = report;
       }
 
-      const rms =
-        Math.sqrt(sum / samples.length);
+      if (
+        report.type === "inbound-rtp" &&
+        (report.kind === "audio" ||
+         report.mediaType === "audio")
+      ) {
 
-      $("level").style.width =
-        Math.min(100, rms * 400) + "%";
+        inbound = report;
+        output = report;
+      }
 
-    }, 100);
+      if (report.type === "transport") {
+
+        transport = report;
+      }
+
+      if (
+        report.type === "candidate-pair" &&
+        report.state === "succeeded" &&
+        report.nominated
+      ) {
+
+        pair = report;
+      }
+    });
+
+    if (transport?.selectedCandidatePairId) {
+
+      pair =
+        stats.get(
+          transport.selectedCandidatePairId
+        ) || pair;
+    }
+
+    displayLevel(
+      "inputLevel",
+      "inputReading",
+      input?.audioLevel
+    );
+
+    displayLevel(
+      "outputLevel",
+      "outputReading",
+      output?.audioLevel
+    );
+
+    $("latency").textContent =
+      typeof pair?.currentRoundTripTime === "number"
+        ? Math.round(
+            pair.currentRoundTripTime * 1000
+          ) + " ms"
+        : "Unavailable";
+
+    $("jitter").textContent =
+      typeof inbound?.jitter === "number"
+        ? Math.round(
+            inbound.jitter * 1000
+          ) + " ms"
+        : "Unavailable";
+
+    if (inbound) {
+
+      const lost = Math.max(
+        0,
+        inbound.packetsLost || 0
+      );
+
+      const received =
+        inbound.packetsReceived || 0;
+
+      const total = lost + received;
+
+      $("loss").textContent =
+        total > 0
+          ? (lost / total * 100).toFixed(2) + "%"
+          : "—";
+    }
 
   } catch {
 
-    // Translation can continue without the meter.
+    // Some Safari versions expose limited statistics.
 
+  } finally {
+
+    s.statsBusy = false;
   }
 }
 
-// ======================================
-// SAFARI AUDIO PLAYBACK FALLBACK
-// ======================================
+// =====================================
+// ENGLISH AUDIO PLAYBACK
+// =====================================
 
 async function enableAudio() {
 
@@ -1053,23 +1567,47 @@ async function enableAudio() {
 
   } catch (error) {
 
-    setStatus(
-      "Audio playback error: " + error.message,
-      "error"
-    );
+    $("playback").textContent =
+      "Audio error: " + error.message;
   }
 }
 
-// ======================================
-// STOP TRANSLATION
-// ======================================
+$("audio").addEventListener("playing", () => {
+
+  if (active) {
+
+    $("playback").textContent =
+      "Playing translated audio";
+  }
+});
+
+$("audio").addEventListener("waiting", () => {
+
+  if (active) {
+
+    $("playback").textContent =
+      "Waiting for audio";
+  }
+});
+
+$("audio").addEventListener("pause", () => {
+
+  if (active) {
+
+    $("playback").textContent =
+      "Playback paused";
+
+    $("play").hidden = false;
+  }
+});
+
+// =====================================
+// STOP AND CLEAN UP
+// =====================================
 
 function stopTranslation(
-
   message = "Translation stopped.",
-
   type = "normal"
-
 ) {
 
   const s = active;
@@ -1081,24 +1619,12 @@ function stopTranslation(
     s.abort.abort();
 
     clearInterval(s.timer);
+    clearInterval(s.statsTimer);
 
-    clearInterval(s.meter);
+    clearTimeout(s.connectTimeout);
+    clearTimeout(s.disconnectTimeout);
 
-    clearTimeout(s.timeout);
-
-    if (s.started) {
-
-      updateSessionTime(
-        Math.floor(
-          (Date.now() - s.started) / 1000
-        )
-      );
-    }
-
-    if (s.pc) {
-
-      s.pc.close();
-    }
+    if (s.pc) s.pc.close();
 
     if (s.stream) {
 
@@ -1107,55 +1633,98 @@ function stopTranslation(
       );
     }
 
-    if (s.context) {
+    if (s.wakeLock) {
 
-      s.context.close().catch(() => {});
+      s.wakeLock.release().catch(() => {});
     }
   }
 
-  accessToken = null;
-  tokenExpiry = null;
+  token = null;
+  expiry = 0;
 
   $("audio").pause();
-
   $("audio").srcObject = null;
 
   $("indicator").classList.remove("active");
 
-  $("level").style.width = "0%";
+  $("inputLevel").style.width = "0%";
+  $("outputLevel").style.width = "0%";
 
-  $("micName").textContent =
-    "Microphone disconnected";
+  $("inputReading").textContent = "—";
+  $("outputReading").textContent = "—";
 
   $("start").disabled = true;
   $("stop").disabled = true;
 
+  $("profile").disabled = false;
   $("microphone").disabled = false;
+  $("detect").disabled = false;
+  $("limit").disabled = false;
+  $("sourceCaptions").disabled = false;
+  $("awake").disabled = false;
 
   $("play").hidden = true;
+
+  $("micName").textContent =
+    "Microphone disconnected";
+
+  $("wakeStatus").textContent =
+    "Screen wake lock inactive";
+
+  $("trackState").textContent = "Stopped";
+  $("connection").textContent = "Closed";
+  $("playback").textContent = "Stopped";
 
   $("authInfo").textContent = "";
 
   $("refresh").hidden =
-    !configureAuthLink();
+    !authLink() ||
+    Date.now() < cooldownUntil;
 
   $("refresh").textContent =
     "Start a new session";
 
-  setStatus(message, type);
+  status(message, type);
+
+  detectMicrophones();
 }
 
-// ======================================
-// PAGE LIFECYCLE SAFETY
-// ======================================
+// =====================================
+// SAFETY AND UI EVENTS
+// =====================================
 
-window.addEventListener("pagehide", () => {
+$("start").onclick = startTranslation;
+
+$("stop").onclick = () => stopTranslation();
+
+$("play").onclick = enableAudio;
+
+$("detect").onclick = detectMicrophones;
+
+$("profile").onchange = updateProfile;
+
+$("filter").onchange = () => {
 
   if (active) {
 
-    stopTranslation();
+    applyAISettings(active);
   }
+};
 
+$("limit").onchange = updateMaxCost;
+
+$("captions").onchange =
+  updateCaptionVisibility;
+
+$("sourceCaptions").onchange = () => {
+
+  updateCaptionVisibility();
+  updateMaxCost();
+};
+
+window.addEventListener("pagehide", () => {
+
+  if (active) stopTranslation();
 });
 
 document.addEventListener(
@@ -1165,23 +1734,23 @@ document.addEventListener(
     if (document.hidden && active) {
 
       stopTranslation(
-        "Stopped because the application was hidden.",
+        "Session stopped because the page was hidden.",
         "warning"
       );
     }
   }
 );
 
-// ======================================
-// INITIALISE APPLICATION
-// ======================================
+// =====================================
+// INITIALISE
+// =====================================
 
 initialiseAuthentication();
-
 detectMicrophones();
+updateProfile();
+updateCaptionVisibility();
+updateMaxCost();
 
 </script>
-
 </body>
-
 </html>
