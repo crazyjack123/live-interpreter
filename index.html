@@ -1,737 +1,522 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1">
+<title>Personal Interpreter</title>
 
-  <title>Live Polish Interpreter</title>
+<style>
+* { box-sizing: border-box; }
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+body {
+  font-family: -apple-system, Arial, sans-serif;
+  background: #f1f5f9;
+  color: #1e293b;
+  margin: 0;
+  padding: 20px;
+  text-align: center;
+}
 
-    body {
-      font-family: -apple-system, BlinkMacSystemFont,
-                   Arial, sans-serif;
-      background: #f1f5f9;
-      color: #1e293b;
-      margin: 0;
-      padding: 24px 16px;
-      text-align: center;
-    }
+.card {
+  max-width: 480px;
+  margin: 15px auto;
+  background: white;
+  padding: 24px;
+  border-radius: 22px;
+  box-shadow: 0 4px 20px #0000000d;
+}
 
-    .container {
-      max-width: 500px;
-      margin: auto;
-    }
+.flags { font-size: 36px; }
 
-    .card {
-      background: white;
-      padding: 24px;
-      border-radius: 20px;
-      margin-bottom: 16px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.06);
-    }
+button, input {
+  width: 100%;
+  padding: 16px;
+  margin: 8px 0;
+  font-size: 16px;
+  border-radius: 12px;
+}
 
-    h1 {
-      font-size: 26px;
-      margin-bottom: 8px;
-    }
+button {
+  border: none;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
 
-    h2 {
-      font-size: 30px;
-      margin: 15px 0;
-    }
+button:disabled { opacity: 0.4; }
 
-    .subtitle {
-      color: #64748b;
-      font-size: 14px;
-    }
+.start { background: #15803d; }
+.stop { background: #dc2626; }
+.play { background: #2563eb; }
 
-    button {
-      display: block;
-      width: 100%;
-      border: none;
-      border-radius: 12px;
-      padding: 16px;
-      margin-top: 12px;
-      font-size: 16px;
-      font-weight: 600;
-      color: white;
-      cursor: pointer;
-    }
+input { border: 1px solid #cbd5e1; }
 
-    button:disabled {
-      opacity: 0.5;
-      cursor: default;
-    }
+#status {
+  background: #f1f5f9;
+  padding: 15px;
+  margin: 15px 0;
+  border-radius: 12px;
+  overflow-wrap: anywhere;
+}
 
-    .start {
-      background: #15803d;
-    }
+#meter {
+  background: #e2e8f0;
+  height: 14px;
+  border-radius: 20px;
+  overflow: hidden;
+}
 
-    .stop {
-      background: #dc2626;
-    }
+#level {
+  background: #22c55e;
+  height: 100%;
+  width: 0%;
+  transition: width 0.1s;
+}
 
-    .diagnose {
-      background: #2563eb;
-    }
+.stats {
+  display: flex;
+  justify-content: space-around;
+  margin: 24px 0;
+}
 
-    .refresh {
-      background: #475569;
-    }
+.stats strong {
+  font-size: 26px;
+  display: block;
+}
 
-    select {
-      width: 100%;
-      padding: 12px;
-      margin-top: 10px;
-      background: white;
-      border: 1px solid #cbd5e1;
-      border-radius: 10px;
-      font-size: 16px;
-    }
+#transcript {
+  text-align: left;
+  white-space: pre-wrap;
+  line-height: 1.6;
+  max-height: 250px;
+  overflow-y: auto;
+}
 
-    #status {
-      background: #f1f5f9;
-      padding: 15px;
-      margin-top: 20px;
-      border-radius: 10px;
-      overflow-wrap: anywhere;
-      font-size: 14px;
-    }
+small { color: #64748b; }
 
-    .meter-background {
-      height: 18px;
-      background: #e2e8f0;
-      border-radius: 20px;
-      overflow: hidden;
-      margin-top: 15px;
-    }
-
-    #audioLevel {
-      height: 100%;
-      width: 0%;
-      background: #22c55e;
-      transition: width 0.1s;
-    }
-
-    #diagnostics {
-      text-align: left;
-      white-space: pre-wrap;
-      overflow-wrap: anywhere;
-      background: #0f172a;
-      color: #e2e8f0;
-      border-radius: 12px;
-      padding: 16px;
-      font-size: 12px;
-      line-height: 1.7;
-      min-height: 70px;
-    }
-
-    #micName {
-      color: #475569;
-      font-size: 13px;
-      overflow-wrap: anywhere;
-    }
-
-    .notice {
-      color: #64748b;
-      font-size: 12px;
-      line-height: 1.6;
-    }
-  </style>
+</style>
 </head>
 
 <body>
 
-<div class="container">
+<div class="card">
 
-  <div class="card">
-    <h1>Live Interpreter</h1>
-    <h2>🇵🇱 → 🇬🇧</h2>
+  <h1>Personal Interpreter</h1>
 
-    <p class="subtitle">
-      Shokz OpenRun · Polish to English
-    </p>
+  <div class="flags">🇵🇱 → 🇬🇧</div>
 
-    <p>Microphone connection test</p>
+  <p>Live Polish to English Translation</p>
 
-    <select id="microphone">
-      <option value="">
-        System default microphone
-      </option>
-    </select>
+  <input id="token"
+         type="password"
+         autocomplete="off"
+         autocapitalize="none"
+         spellcheck="false"
+         placeholder="Paste temporary access token">
 
-    <button class="refresh"
-            onclick="detectMicrophones()">
-      Detect microphones
-    </button>
+  <button id="start"
+          class="start"
+          onclick="startTranslation()">
+    Start live translation
+  </button>
 
-    <button id="startButton"
-            class="start"
-            onclick="startMicrophone()">
-      Start microphone
-    </button>
+  <button id="stop"
+          class="stop"
+          onclick="stopTranslation()"
+          disabled>
+    Stop translation
+  </button>
 
-    <button id="stopButton"
-            class="stop"
-            onclick="stopMicrophone()"
-            disabled>
-      Stop microphone
-    </button>
+  <div id="status">Ready to interpret</div>
 
-    <div id="status">Ready to listen</div>
+  <p id="micName">No microphone connected</p>
 
-    <p id="micName">No microphone connected</p>
+  <div id="meter">
+    <div id="level"></div>
+  </div>
 
-    <div class="meter-background">
-      <div id="audioLevel"></div>
+  <div class="stats">
+    <div>
+      <small>Session time</small>
+      <strong id="duration">00:00</strong>
     </div>
-
-    <p class="subtitle">
-      Audio level: <span id="levelNumber">0</span>%
-    </p>
+    <div>
+      <small>Estimated cost</small>
+      <strong id="cost">$0.00</strong>
+    </div>
   </div>
 
-  <div class="card">
-    <h3>System diagnostics</h3>
+  <audio id="audio" autoplay playsinline></audio>
 
-    <button class="diagnose"
-            onclick="diagnoseMicrophone()">
-      Run full diagnostics
-    </button>
+  <button id="play"
+          class="play"
+          onclick="enableAudio()"
+          hidden>
+    Enable headphone audio
+  </button>
 
-    <pre id="diagnostics">Press Run full diagnostics.</pre>
-  </div>
+  <small>Five-minute automatic test limit</small>
 
-  <p class="notice">
-    Microphone testing only.<br>
-    No audio is recorded or sent to OpenAI.<br>
-    No API charges apply.
-  </p>
+</div>
 
+<div class="card">
+  <h3>Live English translation</h3>
+  <div id="transcript">Waiting for speech...</div>
 </div>
 
 <script>
 
-  let stream = null;
-  let audioContext = null;
-  let analyser = null;
-  let levelTimer = null;
+const $ = id => document.getElementById(id);
 
-  function setStatus(message, type = "normal") {
-    const status = document.getElementById("status");
+const PRICE_PER_MINUTE = 0.034;
+const MAX_SECONDS = 300;
 
-    status.textContent = message;
+let active = null;
 
-    if (type === "error") {
-      status.style.background = "#fee2e2";
-      status.style.color = "#991b1b";
-    } else if (type === "success") {
-      status.style.background = "#dcfce7";
-      status.style.color = "#166534";
-    } else {
-      status.style.background = "#f1f5f9";
-      status.style.color = "#334155";
-    }
+function setStatus(message) {
+  $("status").textContent = message;
+}
+
+async function startTranslation() {
+
+  if (active) return;
+
+  const token = $("token").value.trim();
+
+  if (!token.startsWith("ek_")) {
+    setStatus("Please enter a temporary ek_ token.");
+    return;
   }
 
-  async function detectMicrophones() {
+  const s = {
+    pc: null,
+    stream: null,
+    context: null,
+    timer: null,
+    meter: null,
+    started: null,
+    abort: new AbortController()
+  };
 
-    const select =
-      document.getElementById("microphone");
+  active = s;
 
-    const previousSelection = select.value;
+  $("start").disabled = true;
+  $("stop").disabled = false;
+  $("token").value = "";
+  $("transcript").textContent = "";
+  $("duration").textContent = "00:00";
+  $("cost").textContent = "$0.00";
 
-    if (!navigator.mediaDevices ||
-        !navigator.mediaDevices.enumerateDevices) {
+  try {
 
-      setStatus(
-        "Microphone detection API unavailable.",
-        "error"
-      );
+    setStatus("Connecting microphone...");
 
+    const stream =
+      await navigator.mediaDevices.getUserMedia({
+        audio: {
+          echoCancellation: true,
+          noiseSuppression: false,
+          autoGainControl: true
+        },
+        video: false
+      });
+
+    if (active !== s) {
+      stream.getTracks().forEach(t => t.stop());
       return;
     }
 
-    try {
-      const devices =
-        await navigator.mediaDevices.enumerateDevices();
+    s.stream = stream;
 
-      const microphones = devices.filter(
-        device => device.kind === "audioinput"
-      );
+    const track = stream.getAudioTracks()[0];
 
-      select.innerHTML = "";
+    $("micName").textContent =
+      "Microphone: " +
+      (track.label || "System default");
 
-      const defaultOption =
-        document.createElement("option");
+    track.onended = () => {
+      if (active === s) {
+        stopTranslation("Microphone disconnected.");
+      }
+    };
 
-      defaultOption.value = "";
-      defaultOption.textContent =
-        "System default microphone";
+    s.pc = new RTCPeerConnection();
 
-      select.appendChild(defaultOption);
+    const pc = s.pc;
 
-      microphones.forEach((device, index) => {
+    pc.addTrack(track, stream);
 
-        const option =
-          document.createElement("option");
+    pc.ontrack = async event => {
 
-        option.value = device.deviceId;
+      if (active !== s) return;
 
-        option.textContent =
-          device.label || "Microphone " + (index + 1);
+      $("audio").srcObject =
+        event.streams[0] ||
+        new MediaStream([event.track]);
 
-        select.appendChild(option);
+      try {
+        await $("audio").play();
+      } catch {
+        if (active === s) {
+          $("play").hidden = false;
+        }
+      }
+    };
 
-      });
+    const events = pc.createDataChannel("oai-events");
+
+    events.onmessage = event => {
+
+      if (active !== s) return;
+
+      let data;
+
+      try {
+        data = JSON.parse(event.data);
+      } catch {
+        return;
+      }
 
       if (
-        Array.from(select.options).some(
-          option => option.value === previousSelection
-        )
+        data.type === "session.output_transcript.delta"
       ) {
-        select.value = previousSelection;
+
+        $("transcript").textContent += data.delta;
+
+        $("transcript").scrollTop =
+          $("transcript").scrollHeight;
       }
 
-      return microphones.length;
+      if (data.type === "error") {
+        stopTranslation(
+          data.error?.message || "OpenAI error"
+        );
+      }
 
-    } catch (error) {
+      if (data.type === "session.closed") {
+        stopTranslation("Translation session ended.");
+      }
+    };
 
-      setStatus(
-        "Detection error: " + error.message,
-        "error"
+    pc.onconnectionstatechange = () => {
+
+      if (active !== s) return;
+
+      if (pc.connectionState === "connected") {
+        setStatus("Listening and translating live...");
+      }
+
+      if (pc.connectionState === "disconnected") {
+        setStatus("Connection interrupted...");
+      }
+
+      if (
+        pc.connectionState === "failed" ||
+        pc.connectionState === "closed"
+      ) {
+        stopTranslation("Connection ended.");
+      }
+    };
+
+    setStatus("Connecting to OpenAI...");
+
+    const offer = await pc.createOffer();
+
+    if (active !== s) return;
+
+    await pc.setLocalDescription(offer);
+
+    if (active !== s) return;
+
+    s.started = Date.now();
+
+    s.timer = setInterval(() => {
+
+      const seconds = Math.floor(
+        (Date.now() - s.started) / 1000
       );
 
-      return null;
+      const minutes = Math.floor(seconds / 60);
+      const remaining = seconds % 60;
+
+      $("duration").textContent =
+        String(minutes).padStart(2, "0") +
+        ":" +
+        String(remaining).padStart(2, "0");
+
+      $("cost").textContent =
+        "$" + (
+          seconds / 60 * PRICE_PER_MINUTE
+        ).toFixed(2);
+
+      if (seconds >= MAX_SECONDS) {
+        stopTranslation("Five-minute test completed.");
+      }
+
+    }, 500);
+
+    const response = await fetch(
+      "https://api.openai.com/v1/realtime/translations/calls",
+      {
+        method: "POST",
+        headers: {
+          Authorization: "Bearer " + token,
+          "Content-Type": "application/sdp"
+        },
+        body: offer.sdp,
+        signal: s.abort.signal
+      }
+    );
+
+    if (!response.ok) {
+
+      const message = await response.text();
+
+      throw new Error(
+        "OpenAI error " +
+        response.status + ": " + message
+      );
+    }
+
+    const answer = await response.text();
+
+    if (active !== s) return;
+
+    await pc.setRemoteDescription({
+      type: "answer",
+      sdp: answer
+    });
+
+    if (active !== s) return;
+
+    startAudioMeter(s);
+
+  } catch (error) {
+
+    if (active === s) {
+      stopTranslation(
+        error.name + ": " + error.message
+      );
+    }
+  }
+}
+
+async function startAudioMeter(s) {
+
+  try {
+
+    const AudioContextClass =
+      window.AudioContext ||
+      window.webkitAudioContext;
+
+    s.context = new AudioContextClass();
+
+    await s.context.resume();
+
+    if (active !== s) return;
+
+    const source =
+      s.context.createMediaStreamSource(s.stream);
+
+    const analyser = s.context.createAnalyser();
+
+    analyser.fftSize = 1024;
+
+    source.connect(analyser);
+
+    const samples =
+      new Uint8Array(analyser.fftSize);
+
+    s.meter = setInterval(() => {
+
+      analyser.getByteTimeDomainData(samples);
+
+      let sum = 0;
+
+      for (const sample of samples) {
+        sum += ((sample - 128) / 128) ** 2;
+      }
+
+      const rms =
+        Math.sqrt(sum / samples.length);
+
+      $("level").style.width =
+        Math.min(100, rms * 400) + "%";
+
+    }, 100);
+
+  } catch {
+    // Translation continues without the meter.
+  }
+}
+
+async function enableAudio() {
+
+  try {
+
+    await $("audio").play();
+    $("play").hidden = true;
+
+  } catch (error) {
+
+    setStatus("Audio error: " + error.message);
+
+  }
+}
+
+function stopTranslation(
+  message = "Translation stopped"
+) {
+
+  const s = active;
+
+  active = null;
+
+  if (s) {
+
+    s.abort.abort();
+
+    clearInterval(s.timer);
+    clearInterval(s.meter);
+
+    if (s.pc) {
+      s.pc.close();
+    }
+
+    if (s.stream) {
+      s.stream.getTracks().forEach(t => t.stop());
+    }
+
+    if (s.context) {
+      s.context.close().catch(() => {});
     }
   }
 
-  async function startMicrophone() {
+  $("audio").pause();
+  $("audio").srcObject = null;
 
-    stopMicrophone();
+  $("level").style.width = "0%";
 
-    const startButton =
-      document.getElementById("startButton");
+  $("micName").textContent =
+    "Microphone disconnected";
 
-    const stopButton =
-      document.getElementById("stopButton");
+  $("start").disabled = false;
+  $("stop").disabled = true;
+  $("play").hidden = true;
 
-    startButton.disabled = true;
-    stopButton.disabled = true;
+  setStatus(message);
+}
 
-    setStatus("Requesting microphone permission...");
+window.addEventListener("pagehide", () => {
+  stopTranslation();
+});
 
-    try {
-
-      if (!window.isSecureContext) {
-        throw new Error(
-          "Microphone requires a secure HTTPS connection."
-        );
-      }
-
-      if (!navigator.mediaDevices ||
-          !navigator.mediaDevices.getUserMedia) {
-        throw new Error(
-          "Microphone API unavailable in this browser."
-        );
-      }
-
-      const AudioContextClass =
-        window.AudioContext || window.webkitAudioContext;
-
-      if (!AudioContextClass) {
-        throw new Error(
-          "Web Audio API is unavailable."
-        );
-      }
-
-      audioContext = new AudioContextClass();
-      await audioContext.resume();
-
-      const selectedDevice =
-        document.getElementById("microphone").value;
-
-      const audioSettings = {
-        echoCancellation: true,
-        noiseSuppression: false,
-        autoGainControl: true
-      };
-
-      if (selectedDevice) {
-        audioSettings.deviceId = {
-          exact: selectedDevice
-        };
-      }
-
-      stream =
-        await navigator.mediaDevices.getUserMedia({
-          audio: audioSettings,
-          video: false
-        });
-
-      analyser = audioContext.createAnalyser();
-
-      analyser.fftSize = 1024;
-
-      const source =
-        audioContext.createMediaStreamSource(stream);
-
-      source.connect(analyser);
-
-      const track = stream.getAudioTracks()[0];
-
-      document.getElementById("micName").textContent =
-        "Active microphone: " +
-        (track.label || "System default");
-
-      const data =
-        new Uint8Array(analyser.fftSize);
-
-      levelTimer = setInterval(() => {
-
-        analyser.getByteTimeDomainData(data);
-
-        let sum = 0;
-
-        for (let i = 0; i < data.length; i++) {
-          const sample = (data[i] - 128) / 128;
-          sum += sample * sample;
-        }
-
-        const rms = Math.sqrt(sum / data.length);
-
-        const level =
-          Math.min(100, Math.round(rms * 400));
-
-        document.getElementById("audioLevel")
-          .style.width = level + "%";
-
-        document.getElementById("levelNumber")
-          .textContent = level;
-
-      }, 100);
-
-      await detectMicrophones();
-
-      stopButton.disabled = false;
-
-      setStatus(
-        "Microphone connected successfully",
-        "success"
-      );
-
-    } catch (error) {
-
-      stopMicrophone();
-
-      setStatus(
-        error.name + ": " + error.message,
-        "error"
-      );
-
-      await diagnoseMicrophone();
-
-    }
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden && active?.started) {
+    stopTranslation("Stopped because the page was hidden.");
   }
-
-  function stopMicrophone() {
-
-    clearInterval(levelTimer);
-    levelTimer = null;
-
-    if (stream) {
-      stream.getTracks().forEach(
-        track => track.stop()
-      );
-      stream = null;
-    }
-
-    if (audioContext) {
-      audioContext.close().catch(() => {});
-      audioContext = null;
-    }
-
-    analyser = null;
-
-    document.getElementById("audioLevel")
-      .style.width = "0%";
-
-    document.getElementById("levelNumber")
-      .textContent = "0";
-
-    document.getElementById("micName")
-      .textContent = "No microphone connected";
-
-    document.getElementById("startButton")
-      .disabled = false;
-
-    document.getElementById("stopButton")
-      .disabled = true;
-
-    setStatus("Microphone stopped");
-  }
-
-  async function diagnoseMicrophone() {
-
-    const output =
-      document.getElementById("diagnostics");
-
-    const results = [];
-
-    output.textContent = "Running diagnostics...";
-
-    function report(message) {
-      results.push(message);
-      output.textContent = results.join("\n");
-    }
-
-    report("LIVE INTERPRETER DIAGNOSTICS");
-    report("----------------------------");
-
-    report(
-      "Date: " + new Date().toLocaleString()
-    );
-
-    report(
-      "HTTPS / secure context: " +
-      window.isSecureContext
-    );
-
-    report(
-      "Running inside iframe: " +
-      (window.self !== window.top)
-    );
-
-    report(
-      "MediaDevices available: " +
-      !!navigator.mediaDevices
-    );
-
-    report(
-      "getUserMedia available: " +
-      !!navigator.mediaDevices?.getUserMedia
-    );
-
-    report(
-      "AudioContext available: " +
-      !!(window.AudioContext ||
-         window.webkitAudioContext)
-    );
-
-    report("");
-    report("PERMISSIONS POLICY");
-    report("----------------------------");
-
-    const policy =
-      document.permissionsPolicy ||
-      document.featurePolicy;
-
-    let policyAllowsMic = null;
-
-    try {
-
-      if (policy &&
-          typeof policy.allowsFeature === "function") {
-
-        policyAllowsMic =
-          policy.allowsFeature("microphone");
-
-        report(
-          "Microphone allowed by policy: " +
-          policyAllowsMic
-        );
-
-      } else {
-
-        report(
-          "Permissions policy cannot be inspected."
-        );
-
-      }
-
-    } catch (error) {
-
-      report("Policy error: " + error.message);
-
-    }
-
-    report("");
-    report("BROWSER PERMISSIONS");
-    report("----------------------------");
-
-    let permissionState = "unknown";
-
-    try {
-
-      if (navigator.permissions &&
-          navigator.permissions.query) {
-
-        const permission =
-          await navigator.permissions.query({
-            name: "microphone"
-          });
-
-        permissionState = permission.state;
-
-        report(
-          "Microphone permission: " +
-          permissionState
-        );
-
-      } else {
-
-        report("Permission query unavailable.");
-
-      }
-
-    } catch (error) {
-
-      report(
-        "Microphone permission query not supported."
-      );
-
-    }
-
-    report("");
-    report("DETECTED AUDIO DEVICES");
-    report("----------------------------");
-
-    try {
-
-      if (navigator.mediaDevices &&
-          navigator.mediaDevices.enumerateDevices) {
-
-        const devices =
-          await navigator.mediaDevices.enumerateDevices();
-
-        const microphones = devices.filter(
-          device => device.kind === "audioinput"
-        );
-
-        const outputs = devices.filter(
-          device => device.kind === "audiooutput"
-        );
-
-        report(
-          "Visible microphones: " + microphones.length
-        );
-
-        microphones.forEach((device, index) => {
-
-          report(
-            "Microphone " + (index + 1) + ": " +
-            (device.label || "Name unavailable")
-          );
-
-        });
-
-        report(
-          "Visible audio outputs: " + outputs.length
-        );
-
-        outputs.forEach((device, index) => {
-
-          report(
-            "Output " + (index + 1) + ": " +
-            (device.label || "Name unavailable")
-          );
-
-        });
-
-      } else {
-
-        report("Device detection API unavailable.");
-
-      }
-
-    } catch (error) {
-
-      report(
-        "Device enumeration error: " + error.message
-      );
-
-    }
-
-    report("");
-    report("CONNECTION STATUS");
-    report("----------------------------");
-
-    report(
-      "Active microphone stream: " +
-      !!(stream && stream.active)
-    );
-
-    report(
-      "OpenAI connection: Not used in this test"
-    );
-
-    report("");
-    report("CONCLUSION");
-    report("----------------------------");
-
-    if (!window.isSecureContext) {
-
-      report(
-        "BLOCKED: HTTPS secure connection required."
-      );
-
-    } else if (policyAllowsMic === false) {
-
-      report(
-        "BLOCKED: The browser permissions policy " +
-        "does not allow microphone access."
-      );
-
-      report(
-        "The parent iframe may be preventing access."
-      );
-
-      report(
-        "Recommended solution: standalone HTTPS hosting."
-      );
-
-    } else if (permissionState === "denied") {
-
-      report(
-        "Microphone permission is denied. " +
-        "Check Safari permissions and iframe restrictions."
-      );
-
-    } else if (stream && stream.active) {
-
-      report(
-        "SUCCESS: Microphone access is working."
-      );
-
-    } else if (window.self !== window.top) {
-
-      report(
-        "Application is running inside an iframe. " +
-        "Microphone access may be restricted."
-      );
-
-      report(
-        "Start the microphone to confirm access."
-      );
-
-    } else {
-
-      report(
-        "No confirmed policy restriction detected. " +
-        "Start the microphone to test."
-      );
-
-    }
-  }
-
-  window.addEventListener("pagehide", stopMicrophone);
-
-  diagnoseMicrophone();
+});
 
 </script>
 
